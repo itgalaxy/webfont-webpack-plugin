@@ -1,0 +1,8 @@
+@import 'webfont.scss';
+
+a.avatar {
+    &::before {
+        @extend %webfont;
+        content: $webfont-avatar;
+    }
+}
