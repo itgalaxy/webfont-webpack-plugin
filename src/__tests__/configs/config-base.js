@@ -23,6 +23,10 @@ export default {
             {
                 loader: 'url-loader',
                 test: /\.(svg|eot|ttf|woff|woff2)?$/
+            },
+            {
+                loaders: ['file?name=i/[hash].[ext]'],
+                test: /\.(svg|eot|ttf|woff|woff2)?$/
             }
         ]
     },
@@ -37,16 +41,6 @@ export default {
             dest: {
                 css: path.resolve(__dirname, '../fixtures/css/webfont.css'),
                 fontsDir: path.resolve(__dirname, '../fixtures/css/fonts')
-            },
-            files: path.resolve(__dirname, '../fixtures/svg-icons/**/*.svg')
-        }),
-        new WebfontPlugin({
-            css: true,
-            cssFormat: 'scss',
-            cssTemplateFontPath: './fonts/',
-            dest: {
-                css: path.resolve(__dirname, '../fixtures/scss/_webfont.scss'),
-                fontsDir: path.resolve(__dirname, '../fixtures/scss/fonts')
             },
             files: path.resolve(__dirname, '../fixtures/svg-icons/**/*.svg')
         })
