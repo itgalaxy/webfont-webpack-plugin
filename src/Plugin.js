@@ -3,31 +3,34 @@ import fs from 'fs-extra';
 import path from 'path';
 import webfont from 'webfont';
 
-function WebfontPlugin(options) {
-    this.errors = [];
-    this.options = options;
-}
+export default class WebfontPlugin {
+    constructor(options = {}) {
+        this.options = options;
+        this.errors = [];
+        this.watch = false;
+    }
 
-WebfontPlugin.prototype = {
     apply(compiler) {
-        compiler.plugin('run', (compilerInstance, callback) => this.compile(callback));
+        compiler.plugin('run', (compilerInstance, done) => this.compile(done));
 
-        let watchStarted = false;
-
-        compiler.plugin('watch-run', (watching, watchRunCallback) => {
-            if (watchStarted) {
-                return watchRunCallback();
+        compiler.plugin('watch-run', (watching, done) => {
+            if (this.watch) {
+                return done();
             }
 
-            watchStarted = true;
+            this.watch = true;
 
-            return chokidar.watch(this.options.files).on('all', () => this.compile(watchRunCallback));
+            // eslint-disable-next-line no-empty-function
+            chokidar.watch(this.options.files).on('all', () => this.compile(() => {}));
+
+            return this.compile(done);
         });
 
         compiler.plugin('compilation', (compilation) => {
             compilation.errors = compilation.errors.concat(this.errors);
         });
-    },
+    }
+
     compile(callback) {
         const options = this.options;
 
@@ -162,6 +165,4 @@ WebfontPlugin.prototype = {
                 callback();
             });
     }
-};
-
-export default WebfontPlugin;
+}
