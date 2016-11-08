@@ -24,6 +24,7 @@ export default class WebfontPlugin {
 
         compiler.plugin('watch-run', (watching, done) => {
             if (this.watcher) {
+                this.errors = [];
                 return done();
             }
 

@@ -1,3 +1,7 @@
+# Head
+
+- Fixed: flush `errors` on every compilation.
+
 # 0.0.1-alpha.3 - 2016-11-08
 
 - Chore: refactoring code.
