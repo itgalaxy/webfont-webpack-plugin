@@ -5,23 +5,47 @@ import webfont from 'webfont';
 
 export default class WebfontPlugin {
     constructor(options = {}) {
-        this.options = options;
+        if (!options.files) {
+            throw new Error('Require `files` options');
+        }
+
+        if (!options.dest) {
+            throw new Error('Require `dest` options');
+        }
+
+        this.options = Object.assign({}, options);
+
         this.errors = [];
-        this.watch = false;
+        this.watcher = null;
     }
 
     apply(compiler) {
         compiler.plugin('run', (compilerInstance, done) => this.compile(done));
 
         compiler.plugin('watch-run', (watching, done) => {
-            if (this.watch) {
+            if (this.watcher) {
                 return done();
             }
 
-            this.watch = true;
+            this.watcher = chokidar.watch(this.options.files);
 
-            // eslint-disable-next-line no-empty-function
-            chokidar.watch(this.options.files).on('all', () => this.compile(() => {}));
+            this.watcher.on('ready', () => {
+                this.watcher.on('all', () => {
+                    // Need show errors on output
+                    // eslint-disable-next-line no-empty-function
+                    this.compile(() => {
+                        this.errors.forEach((error) => {
+                            // eslint-disable-next-line no-console
+                            console.log(`[webpack-webfont] ${error.stack}` || error.message);
+                        });
+                    });
+                });
+            });
+
+            this.watcher.on('error', (error) => {
+                // eslint-disable-next-line no-console
+                console.log(`[webpack-webfont] ${error.stack}` || error.message);
+            });
 
             return this.compile(done);
         });

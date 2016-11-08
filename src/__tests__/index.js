@@ -1,77 +1,53 @@
-// eslint-disable-next-line node/no-unpublished-import
-import bluebird from 'bluebird';
-// eslint-disable-next-line node/no-unpublished-import
-import del from 'del';
+import WebfontPlugin from '../WebfontPlugin';
 import path from 'path';
 // eslint-disable-next-line node/no-unpublished-import
-import test from 'ava';
+import sinon from 'sinon';
 // eslint-disable-next-line node/no-unpublished-import
-import webpack from 'webpack';
-import webpackConfigBase from './configs/config-base';
+import test from 'ava';
 
-const fs = bluebird.promisifyAll(require('fs')); // eslint-disable-line import/no-commonjs
+// Write more tests as in
+// https://github.com/drewschrauf/webpack-plugin-acid/blob/
+// c9ee36ef09fe4efe9b57d6602dac28b9a4a06884/test/AcidStaticSiteGeneratorPluginSpec.js
 
-const fixtures = path.resolve(__dirname, 'fixtures');
+const webfontPluginBaseConfig = {
+    css: true,
+    cssTemplateFontPath: './fonts/',
+    dest: {
+        css: path.resolve(__dirname, 'fixtures/css/webfont.css'),
+        fontsDir: path.resolve(__dirname, 'fixtures/css/fonts')
+    },
+    files: path.resolve(__dirname, 'fixtures/svg-icons/**/*.svg')
+};
 
-test.beforeEach(() => del([
-    path.resolve(__dirname, 'build'),
-    `${fixtures}/css/fonts`,
-    `${fixtures}/css/webfont.css`
-]));
-
-test.cb('should execute successfully', (t) => {
-    webpack(webpackConfigBase, (error, stats) => {
-        if (error) {
-            throw error;
-        }
-
-        t.true(stats.compilation.errors.length === 0, 'no compilation error');
-
-        const files = [
-            `${fixtures}/css/fonts/webfont.eot`,
-            `${fixtures}/css/fonts/webfont.svg`,
-            `${fixtures}/css/fonts/webfont.woff`,
-            `${fixtures}/css/fonts/webfont.woff2`,
-            `${fixtures}/css/webfont.css`
-        ];
-
-        const promises = [];
-
-        files.forEach((pathToFile) => {
-            promises.push(fs.statAsync(pathToFile));
-        });
-
-        return Promise.all(promises).then(() => t.end());
-    });
+test('should export `WebfontPlugin` as a class', (t) => {
+    t.true(typeof WebfontPlugin === 'function');
 });
 
-test.cb('should execute successfully on watch', (t) => {
-    const promises = [];
-    const compiler = webpack(webpackConfigBase);
-    let watcherRun = false;
-    const watcher = compiler.watch({
-        aggregateTimeout: 300,
-        poll: true
-    }, (noUsed, stats) => {
-        if (watcherRun) {
-            return;
-        }
+test('should throw error if not passed `files`', (t) => {
+    t.throws(() => new WebfontPlugin(), 'Require `files` options');
+});
 
-        watcherRun = true;
-        t.true(stats.compilation.errors.length === 0, 'no compilation error');
+test('should throw error if not passed `dest`', (t) => {
+    t.throws(() => new WebfontPlugin({
+        files: '**/*.svg'
+    }), 'Require `dest` options');
+});
 
-        const files = [
-            `${fixtures}/css/fonts/webfont.eot`,
-            `${fixtures}/css/fonts/webfont.svg`,
-            `${fixtures}/css/fonts/webfont.woff`,
-            `${fixtures}/css/fonts/webfont.woff2`,
-            `${fixtures}/css/webfont.css`
-        ];
+test('should export options', (t) => {
+    const webfontPlugin = new WebfontPlugin(webfontPluginBaseConfig);
 
-        files.forEach((pathToFile) => {
-            promises.push(fs.statAsync(pathToFile));
-        });
+    t.deepEqual(webfontPlugin.options, webfontPluginBaseConfig);
+});
 
-        watcher.close(() => Promise.all(promises).then(() => t.end()));
-    });
+test('should register methods on apply', (t) => {
+    const webfontPlugin = new WebfontPlugin(webfontPluginBaseConfig);
+    const compiler = {
+        plugin: sinon.spy()
+    };
+
+    webfontPlugin.apply(compiler);
+
+    t.true(compiler.plugin.calledWith('run'));
+    t.true(compiler.plugin.calledWith('watch-run'));
+    t.true(compiler.plugin.calledWith('compilation'));
 });

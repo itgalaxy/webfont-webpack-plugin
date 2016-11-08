@@ -1,4 +1,3 @@
-import WebfontPlugin from '../../Plugin';
 import path from 'path';
 
 export default {
@@ -34,17 +33,7 @@ export default {
         filename: 'bundle.js',
         path: path.resolve(__dirname, '../build')
     },
-    plugins: [
-        new WebfontPlugin({
-            css: true,
-            cssTemplateFontPath: './fonts/',
-            dest: {
-                css: path.resolve(__dirname, '../fixtures/css/webfont.css'),
-                fontsDir: path.resolve(__dirname, '../fixtures/css/fonts')
-            },
-            files: path.resolve(__dirname, '../fixtures/svg-icons/**/*.svg')
-        })
-    ],
+    plugins: [],
     resolve: {
         modulesDirectories: ['web_modules', 'node_modules']
     }
