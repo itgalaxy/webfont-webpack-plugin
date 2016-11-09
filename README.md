@@ -147,8 +147,7 @@ export default {
 - `General options` - see [webfont](https://github.com/itgalaxy/webfont) options. Some options are required.
 - `dest` - (required) generated files.
   - `fontsDir` - (required) directory fonts saving.
-  - `css` - (required if you passed `css` argument) path to file with styles.
-
+  - `stylesDir` - (optional) directory styles saving.
 
 ## Related
 

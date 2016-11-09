@@ -1,4 +1,4 @@
-# Head
+# 0.0.1-alpha.4 - 2016-11-09
 
 - Fixed: flush `errors` on every compilation.
 - Chore: update a minimal version of `webfont` from `6.0.0` to `7.0.0`.
