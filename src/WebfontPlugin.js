@@ -25,6 +25,7 @@ export default class WebfontPlugin {
         compiler.plugin('watch-run', (watching, done) => {
             if (this.watcher) {
                 this.errors = [];
+
                 return done();
             }
 
@@ -59,131 +60,54 @@ export default class WebfontPlugin {
     compile(callback) {
         const options = this.options;
 
-        if (!options.dest) {
-            this.errors.push(new Error('Require "dest" argument'));
-
-            return callback();
-        }
-
-        if (!options.dest.fontsDir) {
-            this.errors.push(new Error('Require "fonts" property for "dest" argument'));
-
-            return callback();
-        }
-
-        if (options.css && !options.dest.css) {
-            this.errors.push(new Error(
-                'Require "css" property for "dest" argument if you passed "true" "css" argument'
-            ));
-
-            return callback();
-        }
-
         return webfont(options)
             .then((result) => {
-                const promisesFs = [];
-                const fontsDest = options.dest.fontsDir;
                 const fontName = result.config.fontName;
+                const dest = path.resolve(this.options.dest.fontsDir);
 
-                if (result.svg) {
-                    promisesFs.push(new Promise(
-                        (resolve, reject) => fs.outputFile(
-                            path.join(fontsDest, `${fontName}.svg`),
-                            result.svg,
-                            (error) => {
-                                if (error) {
-                                    return reject(error);
-                                }
+                let destStyles = null;
 
-                                return resolve();
-                            }
-                        )
-                    ));
+                if (result.styles) {
+                    if (this.options.dest.stylesDir) {
+                        destStyles = path.resolve(this.options.dest.stylesDir);
+                    }
+
+                    if (!destStyles) {
+                        destStyles = dest;
+                    }
+
+                    if (result.usedBuildInStylesTemplate) {
+                        destStyles = path.join(destStyles, `${result.config.fontName}.${result.config.template}`);
+                    } else {
+                        destStyles = path.join(destStyles, path.basename(result.config.template).replace('.njk', ''));
+                    }
                 }
 
-                if (result.ttf) {
-                    promisesFs.push(new Promise(
-                        (resolve, reject) => fs.outputFile(
-                            path.join(fontsDest, `${fontName}.ttf`),
-                            result.ttf,
-                            (error) => {
-                                if (error) {
-                                    return reject(error);
-                                }
+                return Promise.all(Object.keys(result).map((type) => {
+                    if (type === 'config' || type === 'usedBuildInStylesTemplate') {
+                        return Promise.resolve();
+                    }
 
-                                return resolve();
+                    const content = result[type];
+                    let destFilename = null;
+
+                    if (type !== 'styles') {
+                        destFilename = path.resolve(path.join(dest, `${fontName}.${type}`));
+                    } else {
+                        destFilename = path.resolve(destStyles);
+                    }
+
+                    return new Promise((resolve, reject) => {
+                        fs.outputFile(destFilename, content, (error) => {
+                            if (error) {
+                                return reject(new Error(error));
                             }
-                        )
-                    ));
-                }
 
-                if (result.eot) {
-                    promisesFs.push(new Promise(
-                        (resolve, reject) => fs.outputFile(
-                            path.join(fontsDest, `${fontName}.eot`),
-                            result.eot,
-                            (error) => {
-                                if (error) {
-                                    return reject(error);
-                                }
-
-                                return resolve();
-                            }
-                        )
-                    ));
-                }
-
-                if (result.woff) {
-                    promisesFs.push(new Promise(
-                        (resolve, reject) => fs.outputFile(
-                            path.join(fontsDest, `${fontName}.woff`),
-                            result.woff,
-                            (error) => {
-                                if (error) {
-                                    return reject(error);
-                                }
-
-                                return resolve();
-                            }
-                        )
-                    ));
-                }
-
-                if (result.woff2) {
-                    promisesFs.push(new Promise(
-                        (resolve, reject) => fs.outputFile(
-                            path.join(fontsDest, `${fontName}.woff2`),
-                            result.woff2,
-                            (error) => {
-                                if (error) {
-                                    return reject(error);
-                                }
-
-                                return resolve();
-                            }
-                        )
-                    ));
-                }
-
-                if (result.css) {
-                    const cssDest = options.dest.css;
-
-                    promisesFs.push(new Promise(
-                        (resolve, reject) => fs.outputFile(
-                            cssDest,
-                            result.css,
-                            (error) => {
-                                if (error) {
-                                    return reject(error);
-                                }
-
-                                return resolve();
-                            }
-                        )
-                    ));
-                }
-
-                return Promise.all(promisesFs).then(() => callback());
+                            return resolve();
+                        });
+                    });
+                }))
+                    .then(() => callback());
             })
             .catch((error) => {
                 this.errors.push(error);

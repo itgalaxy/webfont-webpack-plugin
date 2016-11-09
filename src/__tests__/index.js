@@ -10,13 +10,13 @@ import test from 'ava';
 // c9ee36ef09fe4efe9b57d6602dac28b9a4a06884/test/AcidStaticSiteGeneratorPluginSpec.js
 
 const webfontPluginBaseConfig = {
-    css: true,
     cssTemplateFontPath: './fonts/',
     dest: {
-        css: path.resolve(__dirname, 'fixtures/css/webfont.css'),
-        fontsDir: path.resolve(__dirname, 'fixtures/css/fonts')
+        fontsDir: path.resolve(__dirname, 'fixtures/css/fonts'),
+        stylesDir: path.resolve(__dirname, 'fixtures/css')
     },
-    files: path.resolve(__dirname, 'fixtures/svg-icons/**/*.svg')
+    files: path.resolve(__dirname, 'fixtures/svg-icons/**/*.svg'),
+    template: 'css'
 };
 
 test('should export `WebfontPlugin` as a class', (t) => {

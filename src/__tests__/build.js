@@ -20,21 +20,23 @@ test.beforeEach(() => del([
     `${fixtures}/css/webfont.css`
 ]));
 
-const webfontPluginBaseConfig = {
-    css: true,
+const webfontPluginBaseOptions = {
     cssTemplateFontPath: './fonts/',
     dest: {
-        css: path.resolve(__dirname, 'fixtures/css/webfont.css'),
-        fontsDir: path.resolve(__dirname, 'fixtures/css/fonts')
+        fontsDir: path.resolve(__dirname, 'fixtures/css/fonts'),
+        stylesDir: path.resolve(__dirname, 'fixtures/css')
     },
-    files: path.resolve(__dirname, 'fixtures/svg-icons/**/*.svg')
+    files: path.resolve(__dirname, 'fixtures/svg-icons/**/*.svg'),
+    template: 'css'
 };
 
 test.cb('should execute successfully', (t) => {
     t.plan(1);
 
+    const options = Object.assign({}, webfontPluginBaseOptions);
+
     webpackConfigBase.plugins = [
-        new WebfontPlugin(webfontPluginBaseConfig)
+        new WebfontPlugin(options)
     ];
 
     webpack(webpackConfigBase, (error, stats) => {
@@ -68,11 +70,35 @@ test.cb('should execute successfully', (t) => {
     });
 });
 
+test.cb('should throw error on invalid options for plugin', (t) => {
+    t.plan(2);
+
+    const options = Object.assign({}, webfontPluginBaseOptions);
+
+    options.files = './';
+
+    webpackConfigBase.plugins = [
+        new WebfontPlugin(options)
+    ];
+
+    webpack(webpackConfigBase, (error, stats) => {
+        if (error) {
+            throw error;
+        }
+
+        t.true(stats.compilation.errors.length === 1, 'no compilation error');
+        t.regex(stats.compilation.errors[0], /Files glob patterns specified did not match any files/);
+        t.end();
+    });
+});
+
 test.cb('should execute successfully on watch', (t) => {
     t.plan(1);
 
+    const options = Object.assign({}, webfontPluginBaseOptions);
+
     webpackConfigBase.plugins = [
-        new WebfontPlugin(webfontPluginBaseConfig)
+        new WebfontPlugin(options)
     ];
 
     const compiler = webpack(webpackConfigBase);

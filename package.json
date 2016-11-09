@@ -48,7 +48,7 @@
         "!**/__tests__"
     ],
     "dependencies": {
-        "webfont": "^6.0.0",
+        "webfont": "^7.0.0",
         "fs-extra": "^1.0.0",
         "chokidar": "^1.6.0"
     },
@@ -67,9 +67,9 @@
         "del-cli": "^0.2.0",
         "eslint": "^3.9.1",
         "eslint-plugin-ava": "^4.0.0",
-        "eslint-plugin-import": "^2.1.0",
-        "eslint-plugin-itgalaxy": "^25.0.0",
-        "eslint-plugin-jsx-a11y": "^2.2.0",
+        "eslint-plugin-import": "^2.2.0",
+        "eslint-plugin-itgalaxy": "^26.0.0",
+        "eslint-plugin-jsx-a11y": "^3.0.0",
         "eslint-plugin-lodash": "^2.1.0",
         "eslint-plugin-node": "^3.0.0",
         "eslint-plugin-promise": "^3.3.0",
