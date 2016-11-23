@@ -1,11 +1,17 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+
+This project adheres to [Semantic Versioning](http://semver.org/).
+
 # 0.0.1-alpha.4 - 2016-11-09
 
 - Fixed: flush `errors` on every compilation.
-- Chore: update a minimal version of `webfont` from `6.0.0` to `7.0.0`.
-- Chore: update a minimal version of `eslint-plugin-import` from `2.1.0` to `2.2.0`.
-- Chore: update a minimal version of `eslint-plugin-itgalaxy` from `25.0.0` to `26.0.0`.
-- Chore: update a minimal version of `eslint-plugin-jsx-a11y` from `2.2.0` to `3.0.0`.
-- Chore: update a minimal version of `eslint-plugin-react` from `6.5.0` to `6.6.0`.
+- Chore: minimum required `webfont` version is now `^7.0.0`.
+- Chore: minimum required `eslint-plugin-import` version is now `^2.2.0`.
+- Chore: minimum required `eslint-plugin-itgalaxy` version is now `^26.0.0`.
+- Chore: minimum required `eslint-plugin-jsx-a11y` version is now `^3.0.0`.
+- Chore: minimum required `eslint-plugin-react` version is now `^6.6.0`.
 - Chore: refactoring for new `webfont` version.
 - Chore: improve tests.
 
