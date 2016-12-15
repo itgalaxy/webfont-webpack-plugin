@@ -5,10 +5,6 @@ import sinon from 'sinon';
 // eslint-disable-next-line node/no-unpublished-import
 import test from 'ava';
 
-// Write more tests as in
-// https://github.com/drewschrauf/webpack-plugin-acid/blob/
-// c9ee36ef09fe4efe9b57d6602dac28b9a4a06884/test/AcidStaticSiteGeneratorPluginSpec.js
-
 const webfontPluginBaseConfig = {
     cssTemplateFontPath: './fonts/',
     dest: {

@@ -60,6 +60,7 @@ test.cb('should execute successfully', (t) => {
             promises.push(fs.statAsync(pathToFile));
         });
 
+        // eslint-disable-next-line promise/no-promise-in-callback
         return Promise
             .all(promises)
             .then(() => t.end())
