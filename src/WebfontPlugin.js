@@ -1,5 +1,6 @@
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
+import nodify from 'nodeify';
 import path from 'path';
 import webfont from 'webfont';
 
@@ -60,58 +61,65 @@ export default class WebfontPlugin {
     compile(callback) {
         const options = this.options;
 
-        return webfont(options)
-            .then((result) => {
-                const fontName = result.config.fontName;
-                const dest = path.resolve(this.options.dest.fontsDir);
+        return nodify(
+            webfont(options)
+                .then((result) => {
+                    const fontName = result.config.fontName;
+                    const dest = path.resolve(this.options.dest.fontsDir);
 
-                let destStyles = null;
+                    let destStyles = null;
 
-                if (result.styles) {
-                    if (this.options.dest.stylesDir) {
-                        destStyles = path.resolve(this.options.dest.stylesDir);
+                    if (result.styles) {
+                        if (this.options.dest.stylesDir) {
+                            destStyles = path.resolve(this.options.dest.stylesDir);
+                        }
+
+                        if (!destStyles) {
+                            destStyles = dest;
+                        }
+
+                        if (result.usedBuildInStylesTemplate) {
+                            destStyles = path.join(destStyles, `${result.config.fontName}.${result.config.template}`);
+                        } else {
+                            destStyles = path.join(
+                                destStyles,
+                                path.basename(result.config.template).replace('.njk', '')
+                            );
+                        }
                     }
 
-                    if (!destStyles) {
-                        destStyles = dest;
-                    }
+                    return Promise.all(Object.keys(result).map((type) => {
+                        if (type === 'config' || type === 'usedBuildInStylesTemplate') {
+                            return Promise.resolve();
+                        }
 
-                    if (result.usedBuildInStylesTemplate) {
-                        destStyles = path.join(destStyles, `${result.config.fontName}.${result.config.template}`);
-                    } else {
-                        destStyles = path.join(destStyles, path.basename(result.config.template).replace('.njk', ''));
-                    }
+                        const content = result[type];
+                        let destFilename = null;
+
+                        if (type !== 'styles') {
+                            destFilename = path.resolve(path.join(dest, `${fontName}.${type}`));
+                        } else {
+                            destFilename = path.resolve(destStyles);
+                        }
+
+                        return new Promise((resolve, reject) => {
+                            fs.outputFile(destFilename, content, (error) => {
+                                if (error) {
+                                    return reject(new Error(error));
+                                }
+
+                                return resolve();
+                            });
+                        });
+                    }));
+                }),
+            (error) => {
+                if (error) {
+                    this.errors.push(error);
                 }
 
-                return Promise.all(Object.keys(result).map((type) => {
-                    if (type === 'config' || type === 'usedBuildInStylesTemplate') {
-                        return Promise.resolve();
-                    }
-
-                    const content = result[type];
-                    let destFilename = null;
-
-                    if (type !== 'styles') {
-                        destFilename = path.resolve(path.join(dest, `${fontName}.${type}`));
-                    } else {
-                        destFilename = path.resolve(destStyles);
-                    }
-
-                    return new Promise((resolve, reject) => {
-                        fs.outputFile(destFilename, content, (error) => {
-                            if (error) {
-                                return reject(new Error(error));
-                            }
-
-                            return resolve();
-                        });
-                    });
-                }))
-                    .then(() => callback());
-            })
-            .catch((error) => {
-                this.errors.push(error);
-                callback();
-            });
+                return callback();
+            }
+        );
     }
 }
