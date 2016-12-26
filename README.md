@@ -15,7 +15,7 @@ Generating fonts from svg icons using webpack. Support any style (`CSS`, `SCSS` 
 ## Install
 
 ```shell
-npm install webpack-webfont
+npm install --save-dev webpack-webfont
 ```
 ## Usage
 
