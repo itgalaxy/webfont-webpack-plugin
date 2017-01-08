@@ -59,12 +59,12 @@ export default class WebfontPlugin {
     }
 
     compile(callback) {
-        const options = this.options;
+        const { options } = this;
 
         return nodify(
             webfont(options)
                 .then((result) => {
-                    const fontName = result.config.fontName;
+                    const { fontName } = result.config;
                     const dest = path.resolve(this.options.dest.fontsDir);
 
                     let destStyles = null;
