@@ -1,4 +1,3 @@
-import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import nodify from 'nodeify';
 import path from 'path';
@@ -15,43 +14,12 @@ export default class WebfontPlugin {
         }
 
         this.options = Object.assign({}, options);
-
-        this.errors = [];
-        this.watcher = null;
+        this.fileDependencies = [];
     }
 
     apply(compiler) {
-        compiler.plugin('watch-run', (watching, done) => {
-            if (this.watcher) {
-                this.errors = [];
-
-                return done();
-            }
-
-            this.watcher = chokidar.watch(this.options.files);
-
-            this.watcher.on('ready', () => {
-                this.watcher.on('all', () => {
-                    // Need show errors on output
-                    // eslint-disable-next-line no-empty-function
-                    this.compile(() => {
-                        this.errors.forEach((error) => {
-                            // eslint-disable-next-line no-console
-                            console.log(`[webpack-webfont] ${error.stack}` || error.message);
-                        });
-                    });
-                });
-            });
-
-            this.watcher.on('error', (error) => {
-                // eslint-disable-next-line no-console
-                console.log(`[webpack-webfont] ${error.stack}` || error.message);
-            });
-
-            return this.compile(done);
-        });
-
         compiler.plugin('make', (compilation, callback) => this.compile(callback));
+        compiler.plugin('after-emit', (compilation, callback) => this.watch(compilation, callback));
     }
 
     compile(callback) {
@@ -62,6 +30,8 @@ export default class WebfontPlugin {
                 .then((result) => {
                     const { fontName } = result.config;
                     const dest = path.resolve(this.options.dest.fontsDir);
+
+                    this.fileDependencies = result.files || [];
 
                     let destStyles = null;
 
@@ -111,5 +81,15 @@ export default class WebfontPlugin {
                 }),
             (error) => callback(error)
         );
+    }
+
+    watch(compilation, callback) {
+        this.fileDependencies.forEach((file) => {
+            if (compilation.fileDependencies.indexOf(file) === -1) {
+                compilation.fileDependencies.push(file);
+            }
+        });
+
+        return callback();
     }
 }

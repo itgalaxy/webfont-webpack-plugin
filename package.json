@@ -50,7 +50,6 @@
     "dependencies": {
         "webfont": "^7.0.0",
         "fs-extra": "^1.0.0",
-        "chokidar": "^1.6.0",
         "nodeify": "^1.0.0"
     },
     "devDependencies": {

@@ -5,10 +5,54 @@ import bluebird from 'bluebird';
 import del from 'del';
 import path from 'path';
 // eslint-disable-next-line node/no-unpublished-import
+import sinon from 'sinon';
+// eslint-disable-next-line node/no-unpublished-import
 import test from 'ava';
 // eslint-disable-next-line node/no-unpublished-import
 import webpack from 'webpack';
 import webpackConfigBase from './configs/config-base';
+
+const webfontPluginBaseConfig = {
+    cssTemplateFontPath: './fonts/',
+    dest: {
+        fontsDir: path.resolve(__dirname, 'fixtures/css/fonts'),
+        stylesDir: path.resolve(__dirname, 'fixtures/css')
+    },
+    files: path.resolve(__dirname, 'fixtures/svg-icons/**/*.svg'),
+    template: 'css'
+};
+
+test('should export `WebfontPlugin` as a class', (t) => {
+    t.true(typeof WebfontPlugin === 'function');
+});
+
+test('should throw error if not passed `files`', (t) => {
+    t.throws(() => new WebfontPlugin(), 'Require `files` options');
+});
+
+test('should throw error if not passed `dest`', (t) => {
+    t.throws(() => new WebfontPlugin({
+        files: '**/*.svg'
+    }), 'Require `dest` options');
+});
+
+test('should export options', (t) => {
+    const webfontPlugin = new WebfontPlugin(webfontPluginBaseConfig);
+
+    t.deepEqual(webfontPlugin.options, webfontPluginBaseConfig);
+});
+
+test('should register methods on apply', (t) => {
+    const webfontPlugin = new WebfontPlugin(webfontPluginBaseConfig);
+    const compiler = {
+        plugin: sinon.spy()
+    };
+
+    webfontPlugin.apply(compiler);
+
+    t.true(compiler.plugin.calledWith('make'));
+    t.true(compiler.plugin.calledWith('after-emit'));
+});
 
 const fs = bluebird.promisifyAll(require('fs')); // eslint-disable-line import/no-commonjs
 
