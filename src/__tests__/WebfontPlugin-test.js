@@ -50,7 +50,8 @@ test('should register methods on apply', (t) => {
 
     webfontPlugin.apply(compiler);
 
-    t.true(compiler.plugin.calledWith('make'));
+    t.true(compiler.plugin.calledWith('run'));
+    t.true(compiler.plugin.calledWith('watch-run'));
     t.true(compiler.plugin.calledWith('after-emit'));
 });
 

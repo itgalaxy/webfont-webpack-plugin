@@ -4,13 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# Head
+
+- Fixed: used `run` and `watch-run` events for the compilation fonts and styles, for avoid endless compilation 
+in watch mode.
+
 # 0.0.1-alpha.6 - 2016-12-11
 
-- Chore: used the `webpack` watch system for watching changes.
+- Fixed: used the `webpack` watch system for watching changes.
 
 # 0.0.1-alpha.5 - 2016-12-11
 
-- Chore: used the `make` event for the compilation fonts and styles.
+- Fixed: used the `make` event for the compilation fonts and styles.
 
 # 0.0.1-alpha.4 - 2016-11-09
 

@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import globParent from 'glob-parent';
 import nodify from 'nodeify';
 import path from 'path';
 import webfont from 'webfont';
@@ -18,7 +19,8 @@ export default class WebfontPlugin {
     }
 
     apply(compiler) {
-        compiler.plugin('make', (compilation, callback) => this.compile(callback));
+        compiler.plugin('run', (compilation, callback) => this.compile(callback));
+        compiler.plugin('watch-run', (compilation, callback) => this.compile(callback));
         compiler.plugin('after-emit', (compilation, callback) => this.watch(compilation, callback));
     }
 
@@ -30,8 +32,6 @@ export default class WebfontPlugin {
                 .then((result) => {
                     const { fontName } = result.config;
                     const dest = path.resolve(this.options.dest.fontsDir);
-
-                    this.fileDependencies = result.files || [];
 
                     let destStyles = null;
 
@@ -84,9 +84,13 @@ export default class WebfontPlugin {
     }
 
     watch(compilation, callback) {
-        this.fileDependencies.forEach((file) => {
-            if (compilation.fileDependencies.indexOf(file) === -1) {
-                compilation.fileDependencies.push(file);
+        const globPatterns = typeof this.options.files === 'string' ? [this.options.files] : this.options.files;
+
+        globPatterns.forEach((globPattern) => {
+            const context = globParent(globPattern);
+
+            if (compilation.contextDependencies.indexOf(context) === -1) {
+                compilation.contextDependencies.push(context);
             }
         });
 
