@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-# Head
+# 0.0.1-alpha.6 - 2016-12-11
 
 - Chore: used the `webpack` watch system for watching changes.
 
