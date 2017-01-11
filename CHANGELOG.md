@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-# Head
+# 0.0.1-alpha.7 - 2016-12-11
 
 - Fixed: used `run` and `watch-run` events for the compilation fonts and styles, for avoid endless compilation 
 in watch mode.
