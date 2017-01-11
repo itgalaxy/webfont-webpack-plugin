@@ -1,16 +1,12 @@
 # webpack-webfont
 
-[![NPM version](
-https://img.shields.io/npm/v/webpack-webfont.svg)](https://www.npmjs.org/package/webpack-webfont) 
-[![Travis Build Status](https://img.shields.io/travis/itgalaxy/webpack-webfont/master.svg?label=build)](
-https://travis-ci.org/itgalaxy/webpack-webfont) 
-[![dependencies Status](https://david-dm.org/itgalaxy/webpack-webfont/status.svg)](
-https://david-dm.org/itgalaxy/webpack-webfont) 
-[![devDependencies Status](https://david-dm.org/itgalaxy/webpack-webfont/dev-status.svg)](
-https://david-dm.org/itgalaxy/webpack-webfont?type=dev)
+[![NPM version](https://img.shields.io/npm/v/webpack-webfont.svg)](https://www.npmjs.org/package/webpack-webfont) 
+[![Travis Build Status](https://img.shields.io/travis/itgalaxy/webpack-webfont/master.svg?label=build)](https://travis-ci.org/itgalaxy/webpack-webfont) 
+[![dependencies Status](https://david-dm.org/itgalaxy/webpack-webfont/status.svg)](https://david-dm.org/itgalaxy/webpack-webfont) 
+[![devDependencies Status](https://david-dm.org/itgalaxy/webpack-webfont/dev-status.svg)](https://david-dm.org/itgalaxy/webpack-webfont?type=dev)
 
-Webpack plugin for [webfont](https://github.com/itgalaxy/webfont) package. 
-Generating fonts from svg icons using webpack. Support any style (`CSS`, `SCSS` and own) template.
+Webpack plugin for the [webfont](https://github.com/itgalaxy/webfont) package. 
+Generating fonts from svg icons using the webpack. Supported any style (`CSS`, `SCSS` and own) of templates.
 
 ## Install
 
