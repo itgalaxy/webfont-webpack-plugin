@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# Head
+
+- Chore: used the `make` event for the compilation fonts and styles.
+
 # 0.0.1-alpha.4 - 2016-11-09
 
 - Fixed: flush `errors` on every compilation.
@@ -12,8 +16,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Chore: minimum required `eslint-plugin-itgalaxy` version is now `^26.0.0`.
 - Chore: minimum required `eslint-plugin-jsx-a11y` version is now `^3.0.0`.
 - Chore: minimum required `eslint-plugin-react` version is now `^6.6.0`.
-- Chore: refactoring for new `webfont` version.
-- Chore: improve tests.
+- Chore: refactored for new `webfont` version.
+- Chore: improved tests.
 
 # 0.0.1-alpha.3 - 2016-11-08
 

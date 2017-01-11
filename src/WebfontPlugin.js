@@ -21,8 +21,6 @@ export default class WebfontPlugin {
     }
 
     apply(compiler) {
-        compiler.plugin('run', (compilerInstance, done) => this.compile(done));
-
         compiler.plugin('watch-run', (watching, done) => {
             if (this.watcher) {
                 this.errors = [];
@@ -53,9 +51,7 @@ export default class WebfontPlugin {
             return this.compile(done);
         });
 
-        compiler.plugin('compilation', (compilation) => {
-            compilation.errors = compilation.errors.concat(this.errors);
-        });
+        compiler.plugin('make', (compilation, callback) => this.compile(callback));
     }
 
     compile(callback) {
@@ -113,13 +109,7 @@ export default class WebfontPlugin {
                         });
                     }));
                 }),
-            (error) => {
-                if (error) {
-                    this.errors.push(error);
-                }
-
-                return callback();
-            }
+            (error) => callback(error)
         );
     }
 }

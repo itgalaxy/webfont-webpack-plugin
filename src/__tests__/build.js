@@ -71,28 +71,6 @@ test.cb('should execute successfully', (t) => {
     });
 });
 
-test.cb('should throw error on invalid options for plugin', (t) => {
-    t.plan(2);
-
-    const options = Object.assign({}, webfontPluginBaseOptions);
-
-    options.files = './';
-
-    webpackConfigBase.plugins = [
-        new WebfontPlugin(options)
-    ];
-
-    webpack(webpackConfigBase, (error, stats) => {
-        if (error) {
-            throw error;
-        }
-
-        t.true(stats.compilation.errors.length === 1, 'no compilation error');
-        t.regex(stats.compilation.errors[0], /Files glob patterns specified did not match any files/);
-        t.end();
-    });
-});
-
 test.cb('should execute successfully on watch', (t) => {
     t.plan(1);
 
