@@ -76,15 +76,14 @@
         "eslint-plugin-promise": "^3.3.0",
         "eslint-plugin-react": "^6.5.0",
         "eslint-plugin-unicorn": "^2.0.0",
-        "file-loader": "^0.9.0",
+        "file-loader": "^0.10.0",
         "sinon": "^1.17.0",
         "npmpub": "^3.1.0",
         "npm-run-all": "^4.0.0",
         "nyc": "^10.0.0",
         "package-schema": "^1.0.0",
-        "remark-cli": "^2.0.0",
-        "remark-lint": "^5.0.0",
-        "remark-preset-lint-itgalaxy": "^4.0.0",
+        "remark-cli": "^3.0.0",
+        "remark-preset-lint-itgalaxy": "^5.0.0",
         "style-loader": "^0.13.0",
         "webpack": "^1.13.0",
         "url-loader": "^0.5.0"
@@ -94,7 +93,7 @@
 
         "lint:eslint": "eslint . --ignore-path .gitignore  --color",
         "lint:package": "ajv -s ./node_modules/package-schema/schema.json -d package --errors=text",
-        "lint:remark": "remark '{**/*,*}.md' -i .gitignore -f -q",
+        "lint:remark": "remark . -i .gitignore -f -q",
         "lint": "npm-run-all -l --parallel lint:*",
 
         "pretest": "npm run lint",
@@ -125,5 +124,10 @@
             "plugin:itgalaxy/node"
         ],
         "root": true
+    },
+    "remarkConfig": {
+        "plugins": [
+            "remark-preset-lint-itgalaxy"
+        ]
     }
 }

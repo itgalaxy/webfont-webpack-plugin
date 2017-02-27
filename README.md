@@ -13,6 +13,7 @@ Generating fonts from svg icons using the webpack. Supported any style (`CSS`, `
 ```shell
 npm install --save-dev webpack-webfont
 ```
+
 ## Usage
 
 For `CSS`:
@@ -141,7 +142,9 @@ export default {
 ## Options
 
 - `General options` - see [webfont](https://github.com/itgalaxy/webfont) options. Some options are required.
+
 - `dest` - (required) generated files.
+
   - `fontsDir` - (required) directory fonts saving.
   - `stylesDir` - (optional) directory styles saving.
 
