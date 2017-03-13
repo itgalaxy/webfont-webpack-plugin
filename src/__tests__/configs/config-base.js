@@ -20,7 +20,7 @@ export default {
                 test: /\.scss$/
             },
             {
-                loader: 'url-loader',
+                loader: 'url',
                 test: /\.(svg|eot|ttf|woff|woff2)?$/
             },
             {
@@ -35,6 +35,9 @@ export default {
     },
     plugins: [],
     resolve: {
-        modulesDirectories: ['web_modules', 'node_modules']
+        modules: ['node_modules']
+    },
+    resolveLoader: {
+        moduleExtensions: ['-loader']
     }
 };
