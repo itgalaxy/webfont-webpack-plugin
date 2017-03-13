@@ -141,16 +141,16 @@ export default {
 
 ## Options
 
-- `General options` - see [webfont](https://github.com/itgalaxy/webfont) options. Some options are required.
+-   `General options` - see [webfont](https://github.com/itgalaxy/webfont) options. Some options are required.
 
-- `dest` - (required) generated files.
+-   `dest` - (required) generated files.
 
-  - `fontsDir` - (required) directory fonts saving.
-  - `stylesDir` - (optional) directory styles saving.
+    -   `fontsDir` - (required) directory fonts saving.
+    -   `stylesDir` - (optional) directory styles saving.
 
 ## Related
 
-- [webfont](https://github.com/itgalaxy/webfont) - api for this package.
+-   [webfont](https://github.com/itgalaxy/webfont) - api for this package.
 
 ## Contribution
 
