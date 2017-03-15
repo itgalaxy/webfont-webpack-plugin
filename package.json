@@ -77,7 +77,7 @@
         "eslint-plugin-react": "^6.5.0",
         "eslint-plugin-unicorn": "^2.0.0",
         "file-loader": "^0.10.0",
-        "sinon": "^1.17.0",
+        "sinon": "^2.0.0",
         "npmpub": "^3.1.0",
         "npm-run-all": "^4.0.0",
         "nyc": "^10.0.0",
