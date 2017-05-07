@@ -74,7 +74,7 @@
         "eslint-plugin-lodash": "^2.1.0",
         "eslint-plugin-node": "^4.0.0",
         "eslint-plugin-promise": "^3.3.0",
-        "eslint-plugin-react": "^6.5.0",
+        "eslint-plugin-react": "^7.0.0",
         "eslint-plugin-unicorn": "^2.0.0",
         "file-loader": "^0.11.0",
         "sinon": "^2.0.0",
