@@ -5,18 +5,11 @@ export default {
     module: {
         loaders: [
             {
-                loaders: [
-                    'style',
-                    'css'
-                ],
+                loaders: ['style', 'css'],
                 test: /\.css/
             },
             {
-                loaders: [
-                    'style',
-                    'css',
-                    'sass'
-                ],
+                loaders: ['style', 'css', 'sass'],
                 test: /\.scss$/
             },
             {

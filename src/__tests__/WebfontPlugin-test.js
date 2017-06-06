@@ -22,27 +22,31 @@ const webfontPluginBaseConfig = {
     template: 'css'
 };
 
-test('should export `WebfontPlugin` as a class', (t) => {
+test('should export `WebfontPlugin` as a class', t => {
     t.true(typeof WebfontPlugin === 'function');
 });
 
-test('should throw error if not passed `files`', (t) => {
+test('should throw error if not passed `files`', t => {
     t.throws(() => new WebfontPlugin(), 'Require `files` options');
 });
 
-test('should throw error if not passed `dest`', (t) => {
-    t.throws(() => new WebfontPlugin({
-        files: '**/*.svg'
-    }), 'Require `dest` options');
+test('should throw error if not passed `dest`', t => {
+    t.throws(
+        () =>
+            new WebfontPlugin({
+                files: '**/*.svg'
+            }),
+        'Require `dest` options'
+    );
 });
 
-test('should export options', (t) => {
+test('should export options', t => {
     const webfontPlugin = new WebfontPlugin(webfontPluginBaseConfig);
 
     t.deepEqual(webfontPlugin.options, webfontPluginBaseConfig);
 });
 
-test('should register methods on apply', (t) => {
+test('should register methods on apply', t => {
     const webfontPlugin = new WebfontPlugin(webfontPluginBaseConfig);
     const compiler = {
         plugin: sinon.spy()
@@ -59,11 +63,13 @@ const fs = bluebird.promisifyAll(require('fs')); // eslint-disable-line import/n
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-test.beforeEach(() => del([
-    path.resolve(__dirname, 'build'),
-    `${fixtures}/css/fonts`,
-    `${fixtures}/css/webfont.css`
-]));
+test.beforeEach(() =>
+    del([
+        path.resolve(__dirname, 'build'),
+        `${fixtures}/css/fonts`,
+        `${fixtures}/css/webfont.css`
+    ])
+);
 
 const webfontPluginBaseOptions = {
     cssTemplateFontPath: './fonts/',
@@ -75,14 +81,12 @@ const webfontPluginBaseOptions = {
     template: 'css'
 };
 
-test.cb('should execute successfully', (t) => {
+test.cb('should execute successfully', t => {
     t.plan(1);
 
     const options = Object.assign({}, webfontPluginBaseOptions);
 
-    webpackConfigBase.plugins = [
-        new WebfontPlugin(options)
-    ];
+    webpackConfigBase.plugins = [new WebfontPlugin(options)];
 
     webpack(webpackConfigBase, (error, stats) => {
         if (error) {
@@ -101,64 +105,63 @@ test.cb('should execute successfully', (t) => {
 
         const promises = [];
 
-        files.forEach((pathToFile) => {
+        files.forEach(pathToFile => {
             promises.push(fs.statAsync(pathToFile));
         });
 
         // eslint-disable-next-line promise/no-promise-in-callback
-        return Promise
-            .all(promises)
-            .then(() => t.end())
-            .catch(() => {
-                t.fail();
-                t.end();
-            });
+        return Promise.all(promises).then(() => t.end()).catch(() => {
+            t.fail();
+            t.end();
+        });
     });
 });
 
-test.cb('should execute successfully on watch', (t) => {
+test.cb('should execute successfully on watch', t => {
     t.plan(1);
 
     const options = Object.assign({}, webfontPluginBaseOptions);
 
-    webpackConfigBase.plugins = [
-        new WebfontPlugin(options)
-    ];
+    webpackConfigBase.plugins = [new WebfontPlugin(options)];
 
     const compiler = webpack(webpackConfigBase);
 
     let watcherRun = false;
     const promises = [];
-    const watcher = compiler.watch({
-        aggregateTimeout: 300,
-        poll: true
-    }, (noUsed, stats) => {
-        if (watcherRun) {
-            return;
+    const watcher = compiler.watch(
+        {
+            aggregateTimeout: 300,
+            poll: true
+        },
+        (noUsed, stats) => {
+            if (watcherRun) {
+                return;
+            }
+
+            watcherRun = true;
+            t.true(
+                stats.compilation.errors.length === 0,
+                'no compilation error'
+            );
+
+            const files = [
+                `${fixtures}/css/fonts/webfont.eot`,
+                `${fixtures}/css/fonts/webfont.svg`,
+                `${fixtures}/css/fonts/webfont.woff`,
+                `${fixtures}/css/fonts/webfont.woff2`,
+                `${fixtures}/css/webfont.css`
+            ];
+
+            files.forEach(pathToFile => {
+                promises.push(fs.statAsync(pathToFile));
+            });
+
+            watcher.close(() =>
+                Promise.all(promises).then(() => t.end()).catch(() => {
+                    t.fail();
+                    t.end();
+                })
+            );
         }
-
-        watcherRun = true;
-        t.true(stats.compilation.errors.length === 0, 'no compilation error');
-
-        const files = [
-            `${fixtures}/css/fonts/webfont.eot`,
-            `${fixtures}/css/fonts/webfont.svg`,
-            `${fixtures}/css/fonts/webfont.woff`,
-            `${fixtures}/css/fonts/webfont.woff2`,
-            `${fixtures}/css/webfont.css`
-        ];
-
-        files.forEach((pathToFile) => {
-            promises.push(fs.statAsync(pathToFile));
-        });
-
-        watcher.close(() => Promise
-            .all(promises)
-            .then(() => t.end())
-            .catch(() => {
-                t.fail();
-                t.end();
-            })
-        );
-    });
+    );
 });
