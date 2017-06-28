@@ -1,17 +1,17 @@
-import fs from 'fs-extra';
-import globParent from 'glob-parent';
-import nodify from 'nodeify';
-import path from 'path';
-import webfont from 'webfont';
+import fs from "fs-extra";
+import globParent from "glob-parent";
+import nodify from "nodeify";
+import path from "path";
+import webfont from "webfont";
 
 export default class WebfontPlugin {
     constructor(options = {}) {
         if (!options.files) {
-            throw new Error('Require `files` options');
+            throw new Error("Require `files` options");
         }
 
         if (!options.dest) {
-            throw new Error('Require `dest` options');
+            throw new Error("Require `dest` options");
         }
 
         this.options = Object.assign({}, options);
@@ -19,13 +19,13 @@ export default class WebfontPlugin {
     }
 
     apply(compiler) {
-        compiler.plugin('run', (compilation, callback) =>
+        compiler.plugin("run", (compilation, callback) =>
             this.compile(callback)
         );
-        compiler.plugin('watch-run', (compilation, callback) =>
+        compiler.plugin("watch-run", (compilation, callback) =>
             this.compile(callback)
         );
-        compiler.plugin('after-emit', (compilation, callback) =>
+        compiler.plugin("after-emit", (compilation, callback) =>
             this.watch(compilation, callback)
         );
     }
@@ -60,7 +60,7 @@ export default class WebfontPlugin {
                             destStyles,
                             path
                                 .basename(result.config.template)
-                                .replace('.njk', '')
+                                .replace(".njk", "")
                         );
                     }
                 }
@@ -68,8 +68,8 @@ export default class WebfontPlugin {
                 return Promise.all(
                     Object.keys(result).map(type => {
                         if (
-                            type === 'config' ||
-                            type === 'usedBuildInStylesTemplate'
+                            type === "config" ||
+                            type === "usedBuildInStylesTemplate"
                         ) {
                             return Promise.resolve();
                         }
@@ -77,7 +77,7 @@ export default class WebfontPlugin {
                         const content = result[type];
                         let destFilename = null;
 
-                        if (type !== 'styles') {
+                        if (type !== "styles") {
                             destFilename = path.resolve(
                                 path.join(dest, `${fontName}.${type}`)
                             );
@@ -102,9 +102,10 @@ export default class WebfontPlugin {
     }
 
     watch(compilation, callback) {
-        const globPatterns = typeof this.options.files === 'string'
-            ? [this.options.files]
-            : this.options.files;
+        const globPatterns =
+            typeof this.options.files === "string"
+                ? [this.options.files]
+                : this.options.files;
 
         globPatterns.forEach(globPattern => {
             const context = globParent(globPattern);
