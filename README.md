@@ -148,6 +148,7 @@ export default {
 
     -   `fontsDir` - (required) directory fonts saving.
     -   `stylesDir` - (optional) directory styles saving.
+    -   `outputFilename` - (optional) Set the filename of the generated styles file
 
 ## Related
 

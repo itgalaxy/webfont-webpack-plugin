@@ -55,6 +55,8 @@ export default class WebfontPlugin {
                             `${result.config.fontName}.${result.config
                                 .template}`
                         );
+                    } else if (this.options.dest.outputFilename) {
+                        destStyles = path.join(destStyles, this.options.dest.outputFilename);
                     } else {
                         destStyles = path.join(
                             destStyles,
