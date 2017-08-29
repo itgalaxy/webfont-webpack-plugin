@@ -110,10 +110,12 @@ test.cb("should execute successfully", t => {
         });
 
         // eslint-disable-next-line promise/no-promise-in-callback
-        return Promise.all(promises).then(() => t.end()).catch(() => {
-            t.fail();
-            t.end();
-        });
+        return Promise.all(promises)
+            .then(() => t.end())
+            .catch(() => {
+                t.fail();
+                t.end();
+            });
     });
 });
 
@@ -157,10 +159,12 @@ test.cb("should execute successfully on watch", t => {
             });
 
             watcher.close(() =>
-                Promise.all(promises).then(() => t.end()).catch(() => {
-                    t.fail();
-                    t.end();
-                })
+                Promise.all(promises)
+                    .then(() => t.end())
+                    .catch(() => {
+                        t.fail();
+                        t.end();
+                    })
             );
         }
     );
