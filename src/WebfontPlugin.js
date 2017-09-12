@@ -1,4 +1,5 @@
 import fs from "fs-extra";
+import glob from "glob";
 import globParent from "glob-parent";
 import nodify from "nodeify";
 import path from "path";
@@ -15,16 +16,30 @@ export default class WebfontPlugin {
         }
 
         this.options = Object.assign({}, options);
-        this.fileDependencies = [];
+        this.skip = false;
+        this.destFilename = null;
     }
 
     apply(compiler) {
+        compiler.plugin("invalid", function(filename) {
+            const srcFiles = glob.sync(this.options.files);
+
+            this.skip =
+                filename === this.destFilename ||
+                srcFiles.indexOf(filename) === -1;
+        });
         compiler.plugin("run", (compilation, callback) =>
             this.compile(callback)
         );
-        compiler.plugin("watch-run", (compilation, callback) =>
-            this.compile(callback)
-        );
+        compiler.plugin("watch-run", (compilation, callback) => {
+            if (this.skip) {
+                this.skip = false;
+
+                return callback();
+            }
+
+            return this.compile(callback);
+        });
         compiler.plugin("after-emit", (compilation, callback) =>
             this.watch(compilation, callback)
         );
@@ -80,18 +95,17 @@ export default class WebfontPlugin {
                         }
 
                         const content = result[type];
-                        let destFilename = null;
 
                         if (type !== "styles") {
-                            destFilename = path.resolve(
+                            this.destFilename = path.resolve(
                                 path.join(dest, `${fontName}.${type}`)
                             );
                         } else {
-                            destFilename = path.resolve(destStyles);
+                            this.destFilename = path.resolve(destStyles);
                         }
 
                         return new Promise((resolve, reject) => {
-                            fs.outputFile(destFilename, content, error => {
+                            fs.outputFile(this.destFilename, content, error => {
                                 if (error) {
                                     return reject(new Error(error));
                                 }
