@@ -21,7 +21,7 @@ export default class WebfontPlugin {
     }
 
     apply(compiler) {
-        compiler.plugin("invalid", function(filename) {
+        compiler.plugin("invalid", filename => {
             const srcFiles = glob.sync(this.options.files);
 
             this.skip =
