@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# 0.0.1.-alpha.9 - 2017-08-29
+
+-   Fixed: infinite recompilation.
+
 # 0.0.1.-alpha.8 - 2017-08-29
 
 -   Added: config option `dest.outputFilename`.
