@@ -64,16 +64,16 @@ export default class WebfontPlugin {
                         destStyles = dest;
                     }
 
-                    if (result.usedBuildInStylesTemplate) {
+                    if (this.options.dest.outputFilename) {
+                        destStyles = path.join(
+                            destStyles,
+                            this.options.dest.outputFilename
+                        );
+                    } else if (result.usedBuildInStylesTemplate) {
                         destStyles = path.join(
                             destStyles,
                             `${result.config.fontName}.${result.config
                                 .template}`
-                        );
-                    } else if (this.options.dest.outputFilename) {
-                        destStyles = path.join(
-                            destStyles,
-                            this.options.dest.outputFilename
                         );
                     } else {
                         destStyles = path.join(
