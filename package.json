@@ -48,7 +48,7 @@
         "!**/__tests__"
     ],
     "dependencies": {
-        "fs-extra": "^4.0.0",
+        "fs-extra": "^5.0.0",
         "glob": "^7.1.2",
         "glob-parent": "^3.1.0",
         "nodeify": "^1.0.0",
