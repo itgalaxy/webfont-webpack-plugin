@@ -50,7 +50,7 @@ export default class WebfontPlugin {
 
         return nodify(
             webfont(options).then(result => {
-                const { fontName } = result.config;
+                const { fontName, template } = result.config;
                 const dest = path.resolve(this.options.dest.fontsDir);
 
                 let destStyles = null;
@@ -67,8 +67,7 @@ export default class WebfontPlugin {
                     if (result.usedBuildInStylesTemplate) {
                         destStyles = path.join(
                             destStyles,
-                            `${result.config.fontName}.${result.config
-                                .template}`
+                            `${fontName}.${template}`
                         );
                     } else if (this.options.dest.outputFilename) {
                         destStyles = path.join(
@@ -78,9 +77,7 @@ export default class WebfontPlugin {
                     } else {
                         destStyles = path.join(
                             destStyles,
-                            path
-                                .basename(result.config.template)
-                                .replace(".njk", "")
+                            path.basename(template).replace(".njk", "")
                         );
                     }
                 }
