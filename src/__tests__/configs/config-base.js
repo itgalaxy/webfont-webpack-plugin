@@ -6,7 +6,7 @@ export default {
         loaders: [
             {
                 loaders: ["style", "css"],
-                test: /\.css/
+                test: /\.css$/
             },
             {
                 loaders: ["style", "css", "sass"],
