@@ -1,158 +1,125 @@
-# webpack-webfont
+# webfont-webpack-plugin
 
-[![NPM version](https://img.shields.io/npm/v/webpack-webfont.svg)](https://www.npmjs.org/package/webpack-webfont)
-[![Travis Build Status](https://img.shields.io/travis/itgalaxy/webpack-webfont/master.svg?label=build)](https://travis-ci.org/itgalaxy/webpack-webfont)
-[![dependencies Status](https://david-dm.org/itgalaxy/webpack-webfont/status.svg)](https://david-dm.org/itgalaxy/webpack-webfont)
-[![devDependencies Status](https://david-dm.org/itgalaxy/webpack-webfont/dev-status.svg)](https://david-dm.org/itgalaxy/webpack-webfont?type=dev)
-[![Greenkeeper badge](https://badges.greenkeeper.io/itgalaxy/webpack-webfont.svg)](https://greenkeeper.io/)
+[![NPM version](https://img.shields.io/npm/v/webfont-webpack-plugin.svg)](https://www.npmjs.org/package/webfont-webpack-plugin)
+[![Travis Build Status](https://img.shields.io/travis/itgalaxy/webfont-webpack-plugin/master.svg?label=build)](https://travis-ci.org/itgalaxy/webfont-webpack-plugin)
+[![dependencies Status](https://david-dm.org/itgalaxy/webfont-webpack-plugin/status.svg)](https://david-dm.org/itgalaxy/webfont-webpack-plugin)
+[![devDependencies Status](https://david-dm.org/itgalaxy/webfont-webpack-plugin/dev-status.svg)](https://david-dm.org/itgalaxy/webfont-webpack-plugin?type=dev)
+[![Greenkeeper badge](https://badges.greenkeeper.io/itgalaxy/webfont-webpack-plugin.svg)](https://greenkeeper.io)
 
-Webpack plugin for the [webfont](https://github.com/itgalaxy/webfont) package. 
+Webpack plugin for the [webfont](https://github.com/itgalaxy/webfont) package.
 Generating fonts from svg icons using the webpack. Supported any style (`CSS`, `SCSS` and own) of templates.
 
 ## Install
 
 ```shell
-npm install --save-dev webpack-webfont
+npm install --save-dev webfont-webpack-plugin
 ```
 
 ## Usage
 
-For `CSS`:
+Example for `css`:
 
 ```css
-@import 'webfont.css';
-
+@import "webfont.css";
 ```
 
 ```js
-import WebfontPlugin from '../../Plugin';
-import path from 'path';
+import "webfont.css";
+```
+
+**webpack.config.js**
+
+```js
+import WebfontPlugin from "webfont-webpack-plugin";
+import path from "path";
 
 export default {
-    entry: path.resolve(__dirname, '../fixtures/entry.js'),
-    output: {
-        path: path.resolve(__dirname, '../build'),
-        filename: 'bundle.js'
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.css/,
-                loaders: [
-                    'style',
-                    'css'
-                ]
-            },
-            {
-                test: /\.scss$/,
-                loaders: [
-                'style',
-                'css',
-                'sass'
-                ]
-            },
-            {
-                loader: 'url-loader',
-                test: /\.(svg|eot|ttf|woff|woff2)?$/
-            },
-        ]
-    },
-
-    resolve: {
-        modulesDirectories: ["web_modules", "node_modules"]
-    },
-    plugins: [
-        new WebfontPlugin({
-            files: path.resolve(__dirname, '../fixtures/svg-icons/**/*.svg'),
-            css: true,
-            cssTemplateFontPath: './fonts/',
-            dest: {
-                fontsDir: path.resolve(__dirname, '../fixtures/css/fonts'),
-                css: path.resolve(__dirname, '../fixtures/css/webfont.css'),
-            }
-        })
+  entry: path.resolve(__dirname, "../entry.js"),
+  output: {
+    path: path.resolve(__dirname, "../dist")
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css/,
+        use: ["style-loader", "css-loader"]
+      },
+      {
+        loader: "url-loader",
+        test: /\.(svg|eot|ttf|woff|woff2)?$/
+      }
     ]
+  },
+  plugins: [
+    new WebfontPlugin({
+      files: path.resolve(__dirname, "../fixtures/svg-icons/**/*.svg"),
+      dest: path.resolve(__dirname, "../fixtures/css/fonts"),
+      destTemplate: path.resolve(__dirname, "../fixtures/css/webfont.css")
+    })
+  ]
 };
 ```
 
 For `SCSS`:
 
 ```scss
-@import 'webfont.scss';
+@import "webfont.scss";
 
 a.avatar {
-    &::before {
-        @extend %webfont;
-        content: $webfont-avatar;
-    }
+  &::before {
+    @extend %webfont;
+    content: $webfont-avatar;
+  }
 }
 ```
 
 ```js
-import WebfontPlugin from '../../Plugin';
-import path from 'path';
+import "webfont.scss";
+```
+
+**webpack.config.js**
+
+```js
+import WebfontPlugin from "webfont-webpack-plugin";
+import path from "path";
 
 export default {
-    entry: path.resolve(__dirname, '../entry.js'),
-    output: {
-        path: path.resolve(__dirname, '../build'),
-        filename: 'bundle.js'
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.css/,
-                loaders: [
-                    'style',
-                    'css'
-                ]
-            },
-            {
-                test: /\.scss$/,
-                loaders: [
-                  'style',
-                  'css',
-                  'sass'
-                ]
-            },
-            {
-                loader: 'url-loader',
-                test: /\.(svg|eot|ttf|woff|woff2)?$/
-            },
-        ]
-    },
-
-    resolve: {
-        modulesDirectories: ["web_modules", "node_modules"]
-    },
-    plugins: [
-        new WebfontPlugin({
-            files: path.resolve(__dirname, '../svg-icons/**/*.svg'),
-            css: true,
-            cssFormat: 'scss',
-            cssTemplateFontPath: './fonts/',
-            dest: {
-                fontsDir: path.resolve(__dirname, '../scss/fonts'),
-                css: path.resolve(__dirname, '../scss/_webfont.scss'),
-            }
-        })
+  entry: path.resolve(__dirname, "../entry.js"),
+  output: {
+    path: path.resolve(__dirname, "../build")
+  },
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        loader: "url-loader",
+        test: /\.(svg|eot|ttf|woff|woff2)?$/
+      }
     ]
+  },
+  plugins: [
+    new WebfontPlugin({
+      files: path.resolve(__dirname, "../fixtures/svg-icons/**/*.svg"),
+      dest: path.resolve(__dirname, "../fixtures/css/fonts"),
+      destTemplate: path.resolve(__dirname, "../fixtures/css/webfont.css")
+    })
+  ]
 };
 ```
 
 ## Options
 
--   `General options` - see [webfont](https://github.com/itgalaxy/webfont) options. Some options are required.
-
--   `dest` - (required) generated files.
-
-    -   `fontsDir` - (required) directory fonts saving.
-    -   `stylesDir` - (optional) directory styles saving.
-    -   `outputFilename` - (optional) Set the filename of the generated styles file
+* `files` - (required) `glob` for files (non `svg` files ignored by default).
+* `dest` - (required) path to generated files.
+* `destTemplate` - (optional) path to generated template directory (if not passed used `dest` option value).
+* additional options - see [webfont](https://github.com/itgalaxy/webfont) options.
 
 ## Related
 
--   [webfont](https://github.com/itgalaxy/webfont) - api for this package.
+* [webfont](https://github.com/itgalaxy/webfont) - api for this package.
 
 ## Contribution
 
