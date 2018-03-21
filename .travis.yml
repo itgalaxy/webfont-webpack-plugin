@@ -1,17 +1,42 @@
 sudo: false
-
+dist: trusty
 language: node_js
 
-node_js:
-    - '7'
-    - '6'
-    - '5'
-    - '4'
+git:
+  depth: 1
+
+branches:
+  only:
+    - master
+    - next
 
 cache:
-    directories:
-        - node_modules
+  directories:
+    - $HOME/.npm
+    - node_modules
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+      node_js: '9'
+      script: npm run $JOB_PART
+      env: JOB_PART=pretest
+    - os: linux
+      node_js: '9'
+      script: npm run $JOB_PART
+      env: JOB_PART=test-only
+    - os: linux
+      node_js: '8'
+      script: npm run $JOB_PART
+      env: JOB_PART=test-only
+    - os: linux
+      node_js: '6'
+      script: npm run $JOB_PART
+      env: JOB_PART=test-only
 
 before_install:
-    - npm prune
-    - npm update
+  - 'if [[ `npm -v` != 5* ]]; then npm i -g npm@^5.0.0; fi'
+  - nvm --version
+  - node --version
+  - npm --version
