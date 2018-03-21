@@ -52,7 +52,7 @@
         "glob": "^7.1.2",
         "glob-parent": "^3.1.0",
         "nodeify": "^1.0.0",
-        "webfont": "^7.0.0"
+        "webfont": "^8.0.0"
     },
     "devDependencies": {
         "ava": "^0.22.0",
