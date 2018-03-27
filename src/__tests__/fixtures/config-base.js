@@ -1,7 +1,7 @@
 import path from "path";
 
 export default {
-  entry: path.resolve(__dirname, "../fixtures/entry.js"),
+  entry: path.join(__dirname, "entry.js"),
   mode: "development",
   module: {
     rules: [
@@ -25,7 +25,7 @@ export default {
   },
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "../build")
+    path: path.join(__dirname, "build")
   },
   plugins: []
 };

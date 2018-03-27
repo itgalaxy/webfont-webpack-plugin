@@ -1,6 +1,6 @@
 {
   "name": "webfont-webpack-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Webpack plugin for webfont package",
   "license": "MIT",
   "author": "itgalaxy <development@itgalaxy.company>",
@@ -80,7 +80,8 @@
     "remark-cli": "^5.0.0",
     "remark-preset-lint-itgalaxy": "^12.0.0",
     "style-loader": "^0.20.3",
-    "webpack": "^4.2.0",
+    "watchpack": "^1.5.0",
+    "webpack": "^4.3.0",
     "url-loader": "^1.0.1",
     "husky": "^0.14.0",
     "lint-staged": "^7.0.0",
@@ -96,7 +97,7 @@
     "fix:eslint": "eslint . '.*.js' --fix --ignore-path .gitignore --ext '.js,.jsx'",
     "fix": "npm-run-all -l -p 'fix:**'",
     "pretest": "npm run lint",
-    "test-only": "nyc ava '**/*-test.js' --verbose --serial",
+    "test-only": "nyc ava --verbose --serial",
     "test": "npm run test-only",
     "prebuild": "rimraf dist",
     "build": "babel src --out-dir dist --ignore /__tests__/",
@@ -154,6 +155,7 @@
     "node": ">= 6.9.5 || >= 8.9.0"
   },
   "peerDependencies": {
-    "webpack": "^3.0.0 || ^4.0.0"
+    "webpack": "^3.0.0 || ^4.0.0",
+    "watchpack": "^1.0.0"
   }
 }

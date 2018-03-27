@@ -1,3 +1,4 @@
+import Watchpack from "watchpack";
 import fs from "fs-extra";
 import nodify from "nodeify";
 import path from "path";
@@ -13,65 +14,87 @@ export default class WebfontPlugin {
       throw new Error("Require `dest` options");
     }
 
-    this.options = Object.assign({}, options);
+    this.options = Object.assign(
+      {
+        bail: null
+      },
+      options
+    );
     this.pluginName = "WebfontPlugin";
+    this.firstRun = true;
+    this.watching = null;
+    this.watcher = null;
+    this.needRegenerate = true;
   }
 
   apply(compiler) {
     this.fileDependencies = [];
     this.contextDependencies = [];
 
-    const beforeCompileFn = (params, callback) => {
-      this.generate(callback);
+    if (typeof this.options.bail !== "boolean" && compiler.options.bail) {
+      this.options.bail = compiler.options.bail;
+    }
+
+    const hookFn = callback =>
+      this.generate(error =>
+        callback(error && this.options.bail ? error : null)
+      );
+
+    const beforeRunFn = (compilation, callback) => hookFn(callback);
+    const watchRunFn = (watching, callback) => {
+      this.watching = watching;
+
+      if (this.firstRun) {
+        return hookFn(() => {
+          this.firstRun = false;
+          this.needRegenerate = false;
+
+          return callback();
+        });
+      }
+
+      return callback();
     };
-    const afterEmitFn = (compilation, callback) => {
-      let compilationFileDependencies = null;
-      let addFileDependency = null;
+    const doneFn = () => {
+      if (this.watching && !this.watching.closed) {
+        const oldWatcher = this.watcher;
 
-      if (Array.isArray(compilation.fileDependencies)) {
-        compilationFileDependencies = new Set(compilation.fileDependencies);
-        addFileDependency = file => compilation.fileDependencies.push(file);
-      } else {
-        compilationFileDependencies = compilation.fileDependencies;
-        addFileDependency = file => compilation.fileDependencies.add(file);
-      }
-
-      let compilationContextDependencies = null;
-      let addContextDependency = null;
-
-      if (Array.isArray(compilation.contextDependencies)) {
-        compilationContextDependencies = new Set(
-          compilation.contextDependencies
+        this.watcher = new Watchpack(
+          this.watching.watchFileSystem.watcherOptions
         );
-        addContextDependency = context =>
-          compilation.contextDependencies.push(context);
-      } else {
-        compilationContextDependencies = compilation.contextDependencies;
-        addContextDependency = context =>
-          compilation.contextDependencies.add(context);
-      }
+        this.watcher.watch(
+          this.fileDependencies,
+          this.contextDependencies,
+          Date.now()
+        );
+        this.watcher.once("change", () => {
+          if (!this.needRegenerate) {
+            this.needRegenerate = true;
+            hookFn(() => {
+              this.needRegenerate = false;
+            });
+          }
+        });
 
-      for (const file of this.fileDependencies) {
-        if (!compilationFileDependencies.has(file)) {
-          addFileDependency(file);
+        if (oldWatcher) {
+          oldWatcher.close();
         }
       }
-
-      for (const context of this.contextDependencies) {
-        if (!compilationContextDependencies.has(context)) {
-          addContextDependency(context);
-        }
-      }
-
-      callback();
+    };
+    const watchCloseFn = () => {
+      this.watcher.close();
     };
 
     if (compiler.hooks) {
-      compiler.hooks.beforeCompile.tapAsync(this.pluginName, beforeCompileFn);
-      compiler.hooks.afterEmit.tapAsync(this.pluginName, afterEmitFn);
+      compiler.hooks.beforeRun.tapAsync(this.pluginName, beforeRunFn);
+      compiler.hooks.watchRun.tapAsync(this.pluginName, watchRunFn);
+      compiler.hooks.done.tap(this.pluginName, doneFn);
+      compiler.hooks.watchClose.tap(this.pluginName, watchCloseFn);
     } else {
-      compiler.plugin("before-compile", beforeCompileFn);
-      compiler.plugin("after-emit", afterEmitFn);
+      compiler.plugin("before-run", beforeRunFn);
+      compiler.plugin("watch-run", watchRunFn);
+      compiler.plugin("done", doneFn);
+      compiler.plugin("watch-close", watchCloseFn);
     }
   }
 
@@ -99,8 +122,8 @@ export default class WebfontPlugin {
             );
           }
 
-          if (result.config.filePath) {
-            const configFilePath = result.config.filePath;
+          if (result.config.config) {
+            const configFilePath = result.config.config;
 
             if (!this.fileDependencies.includes(configFilePath)) {
               this.fileDependencies.push(configFilePath);

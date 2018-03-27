@@ -51,6 +51,6 @@ dist
 !.gitkeep
 
 # Fixtures
-src/__tests__/build
+src/__tests__/fixtures/build
 src/__tests__/fixtures/css/fonts
 src/__tests__/fixtures/css/webfont.css

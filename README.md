@@ -2,6 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/webfont-webpack-plugin.svg)](https://www.npmjs.org/package/webfont-webpack-plugin)
 [![Travis Build Status](https://img.shields.io/travis/itgalaxy/webfont-webpack-plugin/master.svg?label=build)](https://travis-ci.org/itgalaxy/webfont-webpack-plugin)
+[![Build status](https://ci.appveyor.com/api/projects/status/355nglgpgweh2i8a/branch/master?svg=true)](https://ci.appveyor.com/project/evilebottnawi/webfont-webpack-plugin/branch/master)
 [![dependencies Status](https://david-dm.org/itgalaxy/webfont-webpack-plugin/status.svg)](https://david-dm.org/itgalaxy/webfont-webpack-plugin)
 [![devDependencies Status](https://david-dm.org/itgalaxy/webfont-webpack-plugin/dev-status.svg)](https://david-dm.org/itgalaxy/webfont-webpack-plugin?type=dev)
 [![Greenkeeper badge](https://badges.greenkeeper.io/itgalaxy/webfont-webpack-plugin.svg)](https://greenkeeper.io)
@@ -17,11 +18,9 @@ npm install --save-dev webfont-webpack-plugin
 
 ## Usage
 
-Example for `css`:
+Example for `CSS` with directly `import` (will be works for `SCSS`/`Less`/Etc):
 
-```css
-@import "webfont.css";
-```
+**entry.js**
 
 ```js
 import "webfont.css";
@@ -54,13 +53,15 @@ export default {
     new WebfontPlugin({
       files: path.resolve(__dirname, "../fixtures/svg-icons/**/*.svg"),
       dest: path.resolve(__dirname, "../fixtures/css/fonts"),
-      destTemplate: path.resolve(__dirname, "../fixtures/css/webfont.css")
+      destTemplate: path.resolve(__dirname, "../fixtures/css")
     })
   ]
 };
 ```
 
-For `SCSS`:
+Example for `SCSS` with `import` inside `SCSS` file (will be works for `CSS`/`SCSS`/`Less`/Etc):
+
+**any-file.scss**
 
 ```scss
 @import "webfont.scss";
@@ -73,8 +74,10 @@ a.avatar {
 }
 ```
 
+**entry.js**
+
 ```js
-import "webfont.scss";
+import "any-file.scss";
 ```
 
 **webpack.config.js**
@@ -104,7 +107,7 @@ export default {
     new WebfontPlugin({
       files: path.resolve(__dirname, "../fixtures/svg-icons/**/*.svg"),
       dest: path.resolve(__dirname, "../fixtures/css/fonts"),
-      destTemplate: path.resolve(__dirname, "../fixtures/css/webfont.css")
+      destTemplate: path.resolve(__dirname, "../fixtures/css")
     })
   ]
 };
@@ -115,6 +118,7 @@ export default {
 * `files` - (required) `glob` for files (non `svg` files ignored by default).
 * `dest` - (required) path to generated files.
 * `destTemplate` - (optional) path to generated template directory (if not passed used `dest` option value).
+* `bail` - (optional) break build if generation have error.
 * additional options - see [webfont](https://github.com/itgalaxy/webfont) options.
 
 ## Related

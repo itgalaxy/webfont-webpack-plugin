@@ -1,0 +1,30 @@
+# AppVeyor file
+# http://www.appveyor.com/docs/appveyor-yml
+
+# What combinations to test
+environment:
+  matrix:
+    - nodejs_version: 9
+    - nodejs_version: 8
+    - nodejs_version: 6
+
+version: "{build}"
+build: off
+deploy: off
+
+branches:
+  only:
+    - master
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install -g npm@latest
+  - npm install
+
+test_script:
+  - node --version
+  - npm --version
+  - npm run test-only
+
+matrix:
+  fast_finish: true    # set this flag to immediately finish build once one of the jobs fails.

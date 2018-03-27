@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org).
 
+## 0.2.0 - 2018-03-27
+
+* Added: `bail` option for ignore errors.
+* Refactor: use other generate strategy to avoid infinity loops.
+
 ## 0.1.0 - 2018-03-21
 
 * Added: `webpack@4` support.
