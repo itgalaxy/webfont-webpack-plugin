@@ -60,7 +60,9 @@ export default class WebfontPlugin {
         const oldWatcher = this.watcher;
 
         this.watcher = new Watchpack(
-          this.watching.watchFileSystem.watcherOptions
+          this.watching.watchFileSystem
+            ? this.watching.watchFileSystem.watcherOptions
+            : {}
         );
         this.watcher.watch(
           this.fileDependencies,
