@@ -48,7 +48,7 @@
     "!**/__tests__"
   ],
   "dependencies": {
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.0",
     "nodeify": "^1.0.0",
     "webfont": "^8.1.1"
   },
