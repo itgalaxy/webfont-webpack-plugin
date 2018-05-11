@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org).
 
+## 0.2.2 - 2018-05-11
+
+* Fixed: protected close `chokidar` `watcher`, when `os` already kill `watcher`.
+
 ## 0.2.1 - 2018-03-30
 
-* Fix: check if `watchFileSystem` is available.
+* Fixed: check if `watchFileSystem` is available.
 
 ## 0.2.0 - 2018-03-27
 

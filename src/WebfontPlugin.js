@@ -84,7 +84,9 @@ export default class WebfontPlugin {
       }
     };
     const watchCloseFn = () => {
-      this.watcher.close();
+      if (this.watcher) {
+        this.watcher.close();
+      }
     };
 
     if (compiler.hooks) {

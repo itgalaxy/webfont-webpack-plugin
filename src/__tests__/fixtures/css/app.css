@@ -1,4 +1,4 @@
-@import 'webfont.css';
+@import './webfont.css';
 
 .some-class {
     color: red;
