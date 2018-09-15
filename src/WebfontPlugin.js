@@ -144,7 +144,7 @@ export default class WebfontPlugin {
 
           result.glyphsData.forEach(glyphData => {
             const { srcPath } = glyphData;
-            const srcDirname = path.dirname(srcPath);
+            const srcDirname = path.normalize(path.dirname(srcPath));
 
             if (!this.contextDependencies.includes(srcDirname)) {
               this.contextDependencies.push(srcDirname);
