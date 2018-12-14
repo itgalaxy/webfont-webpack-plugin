@@ -58,7 +58,7 @@
     "babel-eslint": "^8.2.2",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.9.0",
-    "css-loader": "^0.28.0",
+    "css-loader": "^2.0.1",
     "del": "^3.0.0",
     "del-cli": "^1.1.0",
     "eslint": "^4.1.1",
