@@ -115,15 +115,15 @@ export default {
 
 ## Options
 
-* `files` - (required) `glob` for files (non `svg` files ignored by default).
-* `dest` - (required) path to generated files.
-* `destTemplate` - (optional) path to generated template directory (if not passed used `dest` option value).
-* `bail` - (optional) break build if generation have error.
-* additional options - see [webfont](https://github.com/itgalaxy/webfont) options.
+- `files` - (required) `glob` for files (non `svg` files ignored by default).
+- `dest` - (required) path to generated files.
+- `destTemplate` - (optional) path to generated template directory (if not passed used `dest` option value).
+- `bail` - (optional) break build if generation have error.
+- additional options - see [webfont](https://github.com/itgalaxy/webfont) options.
 
 ## Related
 
-* [webfont](https://github.com/itgalaxy/webfont) - api for this package.
+- [webfont](https://github.com/itgalaxy/webfont) - api for this package.
 
 ## Contribution
 

@@ -1,6 +1,6 @@
 {
   "name": "webfont-webpack-plugin",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Webpack plugin for webfont package",
   "license": "MIT",
   "author": "itgalaxy <development@itgalaxy.company>",
@@ -44,78 +44,73 @@
   },
   "main": "dist/WebfontPlugin.js",
   "files": [
-    "dist",
-    "!**/__tests__"
+    "!**/__tests__/**",
+    "dist"
   ],
   "dependencies": {
-    "fs-extra": "^6.0.1",
-    "nodeify": "^1.0.0",
-    "webfont": "^8.1.1"
+    "fs-extra": "^7.0.1",
+    "nodeify": "^1.0.1",
+    "webfont": "^9.0.0"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "babel-cli": "^6.22.2",
-    "babel-eslint": "^8.2.2",
-    "babel-preset-env": "^1.6.0",
-    "babel-register": "^6.9.0",
-    "css-loader": "^0.28.0",
-    "del": "^3.0.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "babel-eslint": "^10.0.1",
+    "css-loader": "^2.1.1",
+    "del": "^4.1.0",
     "del-cli": "^1.1.0",
-    "eslint": "^4.1.1",
-    "eslint-plugin-ava": "^4.2.1",
-    "eslint-plugin-import": "^2.6.0",
-    "eslint-plugin-itgalaxy": "^67.0.0",
-    "eslint-plugin-jest": "^21.15.0",
-    "eslint-plugin-jsx-a11y": "^6.0.0",
-    "eslint-plugin-lodash": "^2.4.3",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-prettier": "^2.1.2",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-react": "^7.1.0",
-    "eslint-plugin-unicorn": "^4.0.2",
-    "file-loader": "^1.1.11",
-    "npmpub": "^3.1.0",
-    "npm-run-all": "^4.0.0",
-    "nyc": "^11.0.0",
-    "remark-cli": "^5.0.0",
-    "remark-preset-lint-itgalaxy": "^12.0.0",
-    "style-loader": "^0.21.0",
-    "watchpack": "^1.5.0",
-    "webpack": "^4.3.0",
-    "url-loader": "^1.0.1",
-    "husky": "^0.14.0",
-    "lint-staged": "^7.0.0",
-    "prettier": "^1.5.2"
+    "eslint": "^5.16.0",
+    "eslint-plugin-ava": "^6.0.0",
+    "eslint-plugin-html": "^5.0.3",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-itgalaxy": "^100.0.0",
+    "eslint-plugin-jest": "^22.4.1",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-lodash": "^5.1.0",
+    "eslint-plugin-markdown": "^1.0.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-unicorn": "^8.0.2",
+    "file-loader": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "remark-cli": "^6.0.1",
+    "remark-preset-lint-itgalaxy": "^14.0.0",
+    "standard-version": "^5.0.2",
+    "style-loader": "^0.23.1",
+    "watchpack": "^1.6.0",
+    "webpack": "^4.30.0",
+    "url-loader": "^1.1.2",
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.17.0"
   },
   "scripts": {
-    "precommit": "lint-staged",
-    "lint:eslint": "eslint . --report-unused-disable-directives --ignore-path .gitignore  --color",
-    "lint:prettify": "prettier --list-different '{**/*,*}.{js,mjs,jsx,json,md}' '!{package,composer}*.json' --ignore-path .gitignore",
-    "lint:remark": "remark . -i .gitignore -f -q",
+    "lint:prettify": "prettier --list-different '{**/*,*}.{js,mjs,jsx,json,md}' --ignore-path .gitignore",
+    "lint:js": "eslint . --report-unused-disable-directives --ignore-path .gitignore",
+    "lint:md": "remark . -i .gitignore -f -q",
     "lint": "npm-run-all -l --parallel lint:*",
     "prettify": "npm run lint:prettify -- --write",
     "fix:eslint": "eslint . '.*.js' --fix --ignore-path .gitignore --ext '.js,.jsx'",
     "fix": "npm-run-all -l -p 'fix:**'",
     "pretest": "npm run lint",
-    "test-only": "nyc ava --verbose --serial",
-    "test": "npm run test-only",
+    "test:only": "jest --runInBand",
+    "test": "npm run test:only",
     "prebuild": "rimraf dist",
-    "build": "babel src --out-dir dist --ignore /__tests__/",
+    "build": "babel src --out-dir dist --ignore '**/__tests__/**/*.js'",
     "prepublish": "npm run build",
-    "release": "npmpub"
-  },
-  "ava": {
-    "require": "babel-register",
-    "concurrency": 5,
-    "babel": "inherit"
+    "release": "standard-version"
   },
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
-            "node": "6.9.5"
+            "node": "6.9.0"
           }
         }
       ]
@@ -126,21 +121,21 @@
       "sourceType": "script"
     },
     "extends": [
-      "plugin:itgalaxy/ava",
+      "plugin:itgalaxy/node",
       "plugin:itgalaxy/esnext",
-      "plugin:itgalaxy/node"
+      "plugin:itgalaxy/jest"
     ],
     "overrides": [
       {
         "files": [
-          "src/**",
-          "**/__tests__/**/*.js"
+          "src/**/*"
         ],
         "parserOptions": {
           "sourceType": "module"
         },
         "rules": {
-          "node/no-unsupported-features": "off"
+          "promise/no-callback-in-promise": "off",
+          "node/no-unsupported-features/es-syntax": "off"
         }
       }
     ],
@@ -151,11 +146,18 @@
       "remark-preset-lint-itgalaxy"
     ]
   },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/dist/",
+      "/fixtures/"
+    ]
+  },
   "engines": {
-    "node": ">= 6.9.5 || >= 8.9.0"
+    "node": ">= 8.9.0"
   },
   "peerDependencies": {
-    "webpack": "^3.0.0 || ^4.0.0",
+    "webpack": "^4.0.0",
     "watchpack": "^1.0.0"
   }
 }
