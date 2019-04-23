@@ -18,7 +18,7 @@ export default {
         test: /\.(svg|eot|ttf|woff|woff2)?$/
       },
       {
-        loaders: "file-loader?name=i/[hash].[ext]",
+        loaders: "file-loader?name=[name].[ext]",
         test: /\.(svg|eot|ttf|woff|woff2)?$/
       }
     ]

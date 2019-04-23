@@ -1,5 +1,3 @@
-sudo: false
-dist: trusty
 language: node_js
 
 git:
@@ -19,21 +17,21 @@ matrix:
   fast_finish: true
   include:
     - os: linux
-      node_js: '8'
+      node_js: '11'
       script: npm run $JOB_PART
       env: JOB_PART=pretest
-    # - os: linux
-    #   node_js: '10'
-    #   script: npm run $JOB_PART
-    #   env: JOB_PART=test-only
+    - os: linux
+      node_js: '11'
+      script: npm run $JOB_PART
+      env: JOB_PART=test:only
+    - os: linux
+      node_js: '10'
+      script: npm run $JOB_PART
+      env: JOB_PART=test:only
     - os: linux
       node_js: '8'
       script: npm run $JOB_PART
-      env: JOB_PART=test-only
-    - os: linux
-      node_js: '6'
-      script: npm run $JOB_PART
-      env: JOB_PART=test-only
+      env: JOB_PART=test:only
 
 before_install:
   - npm install -g npm@latest

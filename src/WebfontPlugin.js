@@ -1,7 +1,7 @@
+import path from "path";
 import Watchpack from "watchpack";
 import fs from "fs-extra";
 import nodify from "nodeify";
-import path from "path";
 import webfont from "webfont";
 
 export default class WebfontPlugin {
