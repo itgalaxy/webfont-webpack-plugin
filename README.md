@@ -8,7 +8,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/itgalaxy/webfont-webpack-plugin.svg)](https://greenkeeper.io)
 
 Webpack plugin for the [webfont](https://github.com/itgalaxy/webfont) package.
-Generating fonts from svg icons using the webpack. Supported any style (`CSS`, `SCSS` and own) of templates.
+Generating web fonts from svg icons and ttf fonts using the webpack. Supported any style (`CSS`, `SCSS` and own) of templates.
 
 ## Install
 

@@ -142,14 +142,28 @@ export default class WebfontPlugin {
             }
           }
 
-          result.glyphsData.forEach(glyphData => {
-            const { srcPath } = glyphData;
-            const srcDirname = path.dirname(srcPath);
+          if (result.glyphsData) {
+            result.glyphsData.forEach(glyphData => {
+              const { srcPath } = glyphData;
+              const srcDirname = path.dirname(srcPath);
 
-            if (!this.contextDependencies.includes(srcDirname)) {
-              this.contextDependencies.push(srcDirname);
-            }
-          });
+              if (!this.contextDependencies.includes(srcDirname)) {
+                this.contextDependencies.push(srcDirname);
+              }
+            });
+          }
+
+          if (result.fontsData) {
+            result.fontsData.forEach(fontData => {
+              const { srcPath } = fontData;
+              const srcDirname = path.dirname(srcPath);
+
+              if (!this.contextDependencies.includes(srcDirname)) {
+                this.contextDependencies.push(srcDirname);
+              }
+            });
+          }
+
         }
 
         return Promise.all(
@@ -157,21 +171,37 @@ export default class WebfontPlugin {
             if (
               type === "config" ||
               type === "usedBuildInTemplate" ||
-              type === "glyphsData"
+              type === "glyphsData" ||
+              type === "fontsData"
             ) {
               return Promise.resolve();
             }
 
-            const content = result[type];
-            let file = null;
+            let content = result[type];
 
-            if (type !== "template") {
-              file = path.resolve(dest, `${fontName}.${type}`);
+            // After adding TTF mode multiple files can be returned.
+            //
+            if (!Array.isArray(content)) {
+
+              if (type !== "template") {
+                content = [{name: path.resolve(dest, `${fontName}.${type}`), buffer: content}];
+              } else {
+                content = [{name: destTemplate, buffer: content}];
+              }
+
             } else {
-              file = destTemplate;
+
+              content.forEach(file => {
+                file.name = path.resolve(dest, path.basename(file.name));
+              })
+
             }
 
-            return fs.outputFile(file, content);
+
+            return Promise.all(content.map(file => {
+              return fs.outputFile(file.name, file.buffer);
+            }));
+
           })
         );
       }),
