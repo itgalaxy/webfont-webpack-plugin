@@ -50,7 +50,7 @@
   "dependencies": {
     "fs-extra": "^7.0.1",
     "nodeify": "^1.0.1",
-    "webfont": "file:./../webfont"
+    "webfont": "^9.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
