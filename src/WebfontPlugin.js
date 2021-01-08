@@ -21,6 +21,9 @@ export default class WebfontPlugin {
       options
     );
     this.pluginName = "WebfontPlugin";
+    if (options.verbose) {
+        console.log(this.pluginName, this.options);
+    }
     this.firstRun = true;
     this.watching = null;
     this.watcher = null;
@@ -171,10 +174,14 @@ export default class WebfontPlugin {
               file = destTemplate;
             }
 
+            if (options.verbose) {
+                console.log(this.pluginName, 'output file', file);
+            }
+
             return fs.outputFile(file, content);
           })
         );
-      }),
+      }).catch(reason => console.error(reason)),
       error => callback(error)
     );
   }
